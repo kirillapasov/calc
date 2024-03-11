@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CalcService {
         public double calculateVacationCompensation(Employee employee) {
-            return 0;
+            return employee.getAverageSalary() / 12 * employee.getVacationDays();
         }
 
         public double calculateVacationCompensationWithSpecifiedDays(Employee employee, int specifiedVacationDays) {
