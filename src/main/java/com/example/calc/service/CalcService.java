@@ -14,27 +14,26 @@ public class CalcService {
             return employee.getAverageSalary() / 12 * employee.getVacationDays();
         }
 
-        public double calculateVacationCompensationWithSpecifiedDays(Employee employee, int specifiedVacationDays) {
-            int totalVacationDays = employee.getVacationDays() + specifiedVacationDays;
-            double compensation = employee.getAverageSalary() / 12 * totalVacationDays;
-            int holidays = calculateHolidaysInVacation(employee, specifiedVacationDays);
-            int weekends = calculateWeekendsInVacation(employee, specifiedVacationDays);
-            compensation -= (holidays + weekends) * employee.getAverageSalary() / 12;
-            return compensation;
-        }
+    public double calculateVacationCompensationWithSpecifiedDays(Employee employee, int specifiedVacationDays, LocalDate startDate) {
+        int totalVacationDays = employee.getVacationDays() + specifiedVacationDays;
+        double compensation = employee.getAverageSalary() / 12 * totalVacationDays;
+        int holidays = calculateHolidaysInVacation(employee, specifiedVacationDays, startDate);
+        int weekends = calculateWeekendsInVacation(employee, specifiedVacationDays, startDate);
+        compensation -= (holidays + weekends) * employee.getAverageSalary() / 12;
+        return compensation;
+    }
 
-        private int calculateHolidaysInVacation(Employee employee, int specifiedVacationDays) {
-            int holidays = 0;
-            LocalDate startDate = LocalDate.now();
-            LocalDate endDate = startDate.plusDays(specifiedVacationDays);
-            while (!startDate.isAfter(endDate)) {
-                if (isHoliday(startDate)) {
-                    holidays++;
-                }
-                startDate = startDate.plusDays(1);
+    private int calculateHolidaysInVacation(Employee employee, int specifiedVacationDays, LocalDate startDate) {
+        int holidays = 0;
+        LocalDate endDate = startDate.plusDays(specifiedVacationDays);
+        while (!startDate.isAfter(endDate)) {
+            if (isHoliday(startDate)) {
+                holidays++;
             }
-            return holidays;
+            startDate = startDate.plusDays(1);
         }
+        return holidays;
+    }
         private boolean isHoliday(LocalDate date) {
             List<LocalDate> holidays = Arrays.asList(
                     LocalDate.of(date.getYear(), Month.JANUARY, 1),
@@ -48,18 +47,17 @@ public class CalcService {
         }
 
 
-        private int calculateWeekendsInVacation(Employee employee, int specifiedVacationDays) {
-                int weekends = 0;
-                LocalDate startDate = LocalDate.now();
-                LocalDate endDate = startDate.plusDays(specifiedVacationDays);
-                while (!startDate.isAfter(endDate)) {
-                    if (isWeekend(startDate)) {
-                        weekends++;
-                    }
-                    startDate = startDate.plusDays(1);
-                }
-                return weekends;
+    private int calculateWeekendsInVacation(Employee employee, int specifiedVacationDays, LocalDate startDate) {
+        int weekends = 0;
+        LocalDate endDate = startDate.plusDays(specifiedVacationDays);
+        while (!startDate.isAfter(endDate)) {
+            if (isWeekend(startDate)) {
+                weekends++;
             }
+            startDate = startDate.plusDays(1);
+        }
+        return weekends;
+    }
         private boolean isWeekend(LocalDate date) {
             return date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY;
         }
