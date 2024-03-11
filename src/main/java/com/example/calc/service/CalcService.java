@@ -8,7 +8,11 @@ public class CalcService {
         }
 
         public double calculateVacationCompensationWithSpecifiedDays(Employee employee, int specifiedVacationDays) {
-            double compensation = 0;
+            int totalVacationDays = employee.getVacationDays() + specifiedVacationDays;
+            double compensation = employee.getAverageSalary() / 12 * totalVacationDays;
+            int holidays = calculateHolidaysInVacation(employee, specifiedVacationDays);
+            int weekends = calculateWeekendsInVacation(employee, specifiedVacationDays);
+            compensation -= (holidays + weekends) * employee.getAverageSalary() / 12;
             return compensation;
         }
 
